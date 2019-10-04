@@ -1,9 +1,8 @@
 import 'dart:async';
-import 'dart:convert';
 import 'surah_list.dart';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+
 
 
 
@@ -17,23 +16,33 @@ void main(){
 
 class IslamApp extends StatelessWidget{
 
+  final List<String> entries = <String>[
+    'A','B','C','d','v','s','a'
+  ];
+
+  final List<int> colorCode = <int>[
+    600,500,100,
+    600,500,100,
+    600,500
+  ];
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Display Lis of Surah',
+      title: 'Fetch Data Example',
       theme: ThemeData(
-        textTheme: Theme.of(context).textTheme.apply(
-          bodyColor: Colors.black,
-          displayColor: Colors.grey[600],
-        ),
-        // This colors the [InputOutlineBorder] when it is selected
-        primaryColor: Colors.grey[500],
-        textSelectionHandleColor: Colors.green[500],
+        primarySwatch: Colors.blue,
       ),
-      home: SurahList(),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Fetch Data Example'),
+        ),
+        body: SurahList(
+            entries, colorCode
+        ),
+      ),
     );
   }
 
@@ -59,19 +68,6 @@ class IslamApp extends StatelessWidget{
 
 
 
-
-Future<Post> fetchPost() async {
-  final response =
-  await http.get('https://jsonplaceholder.typicode.com/posts/2');
-
-  if (response.statusCode == 200) {
-    // If the call to the server was successful, parse the JSON.
-    return Post.fromJson(json.decode(response.body));
-  } else {
-    // If that call was not successful, throw an error.
-    throw Exception('Failed to load post');
-  }
-}
 
 class Post {
   final int userId;
@@ -90,8 +86,6 @@ class Post {
     );
   }
 }
-
-
 
 class MyApp extends StatelessWidget {
   final Future<Post> post;
@@ -128,3 +122,18 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+
+
+/*Future<Post> fetchPost() async {
+  final response =
+  await http.get('https://jsonplaceholder.typicode.com/posts/2');
+
+  if (response.statusCode == 200) {
+    // If the call to the server was successful, parse the JSON.
+    return Post.fromJson(json.decode(response.body));
+  } else {
+    // If that call was not successful, throw an error.
+    throw Exception('Failed to load post');
+  }
+}*/
