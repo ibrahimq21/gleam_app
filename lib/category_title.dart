@@ -3,26 +3,11 @@ import 'package:flutter/material.dart';
 const _rowHeight = 100.0;
 final _borderRadius = BorderRadius.circular(_rowHeight);
 
-class CategoryTitle extends StatelessWidget{
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+class CategoryTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Material(
-
       color: Colors.transparent,
       child: Container(
         height: _rowHeight,
@@ -33,7 +18,7 @@ class CategoryTitle extends StatelessWidget{
 
 //          onTap: null,
           child: Padding(
-              padding: EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
@@ -45,14 +30,9 @@ class CategoryTitle extends StatelessWidget{
                 )
               ],
             ),
-
           ),
         ),
       ),
-
-
     );
   }
-
-
 }

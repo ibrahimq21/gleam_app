@@ -1,60 +1,47 @@
 import 'package:flutter/material.dart';
-import 'category_title.dart';
+import 'package:gleam_app/surah.dart';
 
 class SurahList extends StatefulWidget {
   List<String> entries;
 
+  final Future<Surah> surah;
+
   List<int> colorCode;
-  SurahList(this.entries, this.colorCode);
+  SurahList({Key key, this.surah}) : super(key: key);
 
   @override
-  _SurahListState createState() => _SurahListState(entries, colorCode);
+  _SurahListState createState() => _SurahListState(this.surah);
 }
 
 class _SurahListState extends State<SurahList> {
-  final _surahList = <String>[];
+  Future<Surah> surah;
 
-  static const _surahNames = <String>[
-    'Al-Faatiha',
-    'Al-Baqara',
-    'Aal-i-Imraan',
-    'An-Nisaa',
-    'Al-Maaida',
-    'Al-An\' aam',
-    'Al-A\'raaf',
-    'Al-Anfaal',
-  ];
-  List<String> entries;
-
-  List<int> colorCode;
-
-  _SurahListState(this.entries, this.colorCode);
+  _SurahListState(this.surah);
 
   Widget _buildCategoryWidgets() {
-    return ListView.builder(
-        padding: const EdgeInsets.all(8),
-        itemCount: entries.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Container(
-            height: 50,
-            color: Colors.amber[colorCode[index]],
-            child: Center(
-                child: Text(
-                    '${_surahNames[index]}'
-                )
+    return ListView.separated(
+      padding: const EdgeInsets.all(8),
+      itemBuilder: (BuildContext context, int index) {
+        return Container(
+          height: 50,
+          color: Colors.blue,
+          child: Center(
+            child: FutureBuilder<Surah>(
+              future: surah,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Text(snapshot.data.englishName);
+                } else if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                }
+                return CircularProgressIndicator();
+              },
             ),
-          );
-        });
-    /*else {
-      return GridView.count(
-        crossAxisCount: 2,
-        childAspectRatio: 3.0,
-        children: _categories.map((Category c) {
-          return CategoryTitle(
-
-          );
-        }).toList(),
-      );*/
+          ),
+        );
+      },
+      separatorBuilder: (BuildContext context, int index) => const Divider(),
+    );
   }
 
   @override
