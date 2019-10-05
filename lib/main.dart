@@ -1,11 +1,5 @@
-import 'dart:async';
-import 'package:gleam_app/service_api.dart';
-import 'package:gleam_app/surah.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
+import 'package:gleam_app/service/service_api.dart';
 import 'surah_list.dart';
-
 import 'package:flutter/material.dart';
 
 void main() {
@@ -24,11 +18,11 @@ class IslamApp extends StatelessWidget {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Gelam App'),
+          title: Text('Gleam App'),
         ),
-        body: SurahList(
+        body: SurahLists(
           context,
-          surah: ServiceAPi.fetchSurahNames(),
+          surah: ServiceAPi.fetchSurahNamesList(),
         ),
       ),
     );
