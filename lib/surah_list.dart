@@ -5,22 +5,25 @@ class SurahList extends StatefulWidget {
   List<String> entries;
 
   final Future<Surah> surah;
+  final BuildContext context;
 
   List<int> colorCode;
-  SurahList({Key key, this.surah}) : super(key: key);
+  SurahList(this.context, {Key key, this.surah}) : super(key: key);
 
   @override
-  _SurahListState createState() => _SurahListState(this.surah);
+  _SurahListState createState() => _SurahListState(this.surah, this.context);
 }
 
 class _SurahListState extends State<SurahList> {
+  BuildContext context;
   Future<Surah> surah;
 
-  _SurahListState(this.surah);
+  _SurahListState(this.surah, this.context);
 
   Widget _buildCategoryWidgets() {
     return ListView.separated(
       padding: const EdgeInsets.all(8),
+      itemCount: 1,
       itemBuilder: (BuildContext context, int index) {
         return Container(
           height: 50,
@@ -30,7 +33,7 @@ class _SurahListState extends State<SurahList> {
               future: surah,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return Text(snapshot.data.englishName);
+                  return Text(snapshot.data.englishName.toString());
                 } else if (snapshot.hasError) {
                   return Text("${snapshot.error}");
                 }

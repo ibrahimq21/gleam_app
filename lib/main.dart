@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:gleam_app/service_api.dart';
 import 'package:gleam_app/surah.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -12,16 +13,6 @@ void main() {
 }
 
 class IslamApp extends StatelessWidget {
-  Future<Surah> _fetchSurahNames() async {
-    final response = await http.get('http://api.alquran.cloud/v1/surah');
-
-    if (response.statusCode == 200) {
-      return Surah.fromJson(json.decode(response.body));
-    }else{
-      throw Exception("Failed to Load api");
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -36,10 +27,10 @@ class IslamApp extends StatelessWidget {
           title: Text('Gelam App'),
         ),
         body: SurahList(
-          surah: _fetchSurahNames(),
+          context,
+          surah: ServiceAPi.fetchSurahNames(),
         ),
       ),
     );
   }
 }
-
