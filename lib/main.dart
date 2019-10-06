@@ -1,5 +1,5 @@
 import 'package:gleam_app/service/service_api.dart';
-import 'surah_list.dart';
+import 'package:gleam_app/ui/surah_list.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -12,7 +12,7 @@ class IslamApp extends StatelessWidget {
     // TODO: implement build
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Fetch Data Example',
+      title: 'Gleam App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -22,7 +22,7 @@ class IslamApp extends StatelessWidget {
         ),
         body: SurahLists(
           context,
-          surah: ServiceAPi.fetchSurahNamesList(),
+          surah: ServiceAPI.fetchSurahNamesList(),
         ),
       ),
     );

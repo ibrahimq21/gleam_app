@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gleam_app/model/surah.dart';
 import 'package:gleam_app/service/service_api.dart';
 
-import 'model/surah.dart';
-
-
-
+import 'ayah_list.dart';
 
 class SurahLists extends StatefulWidget {
   List<String> entries;
@@ -31,21 +29,34 @@ class _SurahListState extends State<SurahLists> {
       itemCount: 114,
       itemBuilder: (BuildContext context, int index) {
         return Container(
+          child: RaisedButton(
+              child: Center(
+                child: FutureBuilder<SurahList>(
+                  future: surah,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Text('${snapshot.data.surahs[index].name}');
+                    } else if (snapshot.hasError) {
+                      return Text("${snapshot.error}");
+                    }
+                    return CircularProgressIndicator();
+                  },
+                ),
+              ),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AyahList(
+                              context,
+                              surah: ServiceAPI.fetchListOfAyah(index),
+                            ),
+                    ),
+                );
+              }
+              ),
           height: 50,
           color: Colors.blue,
-          child: Center(
-            child: FutureBuilder<SurahList>(
-              future: surah,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Text('${snapshot.data.surahs[index].englishName}');
-                } else if (snapshot.hasError) {
-                  return Text("${snapshot.error}");
-                }
-                return CircularProgressIndicator();
-              },
-            ),
-          ),
         );
       },
       separatorBuilder: (BuildContext context, int index) => const Divider(),

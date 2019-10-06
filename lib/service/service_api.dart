@@ -3,70 +3,95 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 
-class ServiceAPi {
 
+
+class LengthRet{
+
+  static int length;
+
+  LengthRet();
+
+  static int returnLength(int len){
+
+    length = len;
+
+    return length;
+
+  }
+
+
+}
+
+class ServiceAPI {
 
   static int LENGTH;
 
 
-  /*static Future<int> fetchLength() async{
-    try {
-      final res = await http.get('http://api.alquran.cloud/v1/surah');
+
+
+
+
+  static Future<RootAyah> fetchListOfAyah(int surah) async{
+
+
+    surah++;
+    try{
+      final res = await http.get('http://api.alquran.cloud/v1/surah/'+surah.toString()+'/en.asad');
+
+//      print(res.body);
 
       if(res.statusCode == 200){
 
-
         final jsonRes = json.decode(res.body);
 
-        LENGTH = SurahList.fromJson(jsonRes).surahs.length;
+        RootAyah ayats = RootAyah.fromJson(jsonRes);
+
+        LENGTH = ayats.surah.numberOfAyah;
 
 
 
 
 
-
-
-        return null;
+        return ayats;
 
       }else{
         return null;
       }
 
-    } catch (ex) {
-      print(ex.toString());
 
+    }catch(ex){
+      print(ex.toString());
       return null;
     }
 
-  }*/
+
+
+
+
+  }
+
   static Future<SurahList> fetchSurahNamesList() async {
     try {
       final res = await http.get('http://api.alquran.cloud/v1/surah');
 
-      if(res.statusCode == 200){
-
-
+      if (res.statusCode == 200) {
         final jsonRes = json.decode(res.body);
 
         SurahList surahList = SurahList.fromJson(jsonRes);
 
-
-
-        LENGTH = surahList.surahs.length;
-
-
-
         return surahList;
-      }else{
+      } else {
         return null;
       }
-
     } catch (ex) {
       print(ex.toString());
 
       return null;
     }
   }
+
+
+
 
   static Future<Root> fetchSurahNames() async {
     print("fetchSurahNames: called");
