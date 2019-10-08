@@ -3,71 +3,34 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 
-
-
-class LengthRet{
-
-  static int length;
-
-  LengthRet();
-
-  static int returnLength(int len){
-
-    length = len;
-
-    return length;
-
-  }
-
-
+class Ret {
+  static int len;
 }
 
 class ServiceAPI {
-
-  static int LENGTH;
-
-
-
-
-
-
-  static Future<RootAyah> fetchListOfAyah(int surah) async{
-
-
+  static Future<RootAyah> fetchListOfAyah(int surah) async {
     surah++;
-    try{
-      final res = await http.get('http://api.alquran.cloud/v1/surah/'+surah.toString()+'/en.asad');
+    try {
+      final res = await http.get(
+          'http://api.alquran.cloud/v1/surah/' + surah.toString() + '/en.asad');
 
-//      print(res.body);
-
-      if(res.statusCode == 200){
-
+      if (res.statusCode == 200) {
         final jsonRes = json.decode(res.body);
 
         RootAyah ayats = RootAyah.fromJson(jsonRes);
 
-        LENGTH = ayats.surah.numberOfAyah;
+        int len = ayats.surah.numberOfAyah;
 
-
-
-
+        Ret.len = len;
 
         return ayats;
-
-      }else{
+      } else {
         return null;
       }
-
-
-    }catch(ex){
+    } catch (ex) {
       print(ex.toString());
       return null;
     }
-
-
-
-
-
   }
 
   static Future<SurahList> fetchSurahNamesList() async {
@@ -89,9 +52,6 @@ class ServiceAPI {
       return null;
     }
   }
-
-
-
 
   static Future<Root> fetchSurahNames() async {
     print("fetchSurahNames: called");

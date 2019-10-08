@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:gleam_app/model/surah.dart';
-import 'package:gleam_app/service/service_api.dart';
-import 'package:quiver/core.dart';
 
 class AyahList extends StatefulWidget {
   final Future<RootAyah> surah;
@@ -16,23 +14,63 @@ class AyahList extends StatefulWidget {
 
 class _AyahListState extends State<AyahList> {
   Future<RootAyah> surah;
-
   _AyahListState(this.surah);
 
-  int length;
 
-  Future<String> _calc() async {
-    setState(() {
-      length = ServiceAPI.LENGTH;
-    });
 
-    return length.toString();
+  Widget _mainProjectWidget(){
+
+    return FutureBuilder<RootAyah>(
+      future: surah,
+      builder: (context, snapshot){
+        if(snapshot.connectionState == ConnectionState.none && snapshot.hasData == null){
+
+          return CircularProgressIndicator();
+        }
+
+        return ListView.separated(
+
+
+            itemCount: snapshot.data.surah.ayahs.length,
+            itemBuilder: (context, int index){
+              return Container(
+                height: 50,
+                color: Colors.blue,
+                child: RaisedButton(
+                  child: Center(
+                    child: Text('${snapshot.data.surah.ayahs[index].text}'),
+
+                  ),
+                    onPressed: (){
+                      Navigator.pop(context);
+                    }
+                ),
+              );
+            },
+          separatorBuilder: (BuildContext context, int index) => const Divider(),
+        );
+
+      },
+
+    );
+
   }
+
+
+  int length = 1;
+
+
+  RootAyah ayahList = new RootAyah();
+
+  
 
   Widget _buildCategoryWidgets() {
     return ListView.separated(
+
       padding: const EdgeInsets.all(8),
-      itemCount: length,
+
+
+      itemCount: 100,
       itemBuilder: (BuildContext context, int index) {
         return Container(
           child: RaisedButton(
@@ -41,8 +79,10 @@ class _AyahListState extends State<AyahList> {
                   future: surah,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      length = snapshot.data.surah.ayahs.length;
-                      return Text('${snapshot.data.surah.ayahs[index].text}');
+                      return ListTile(
+                        title: Text('${snapshot.data.surah.ayahs[index].text}'),
+                      );
+
                     } else if (snapshot.hasError) {
                       return Text("${snapshot.error}");
                     }
@@ -65,12 +105,11 @@ class _AyahListState extends State<AyahList> {
   Widget build(BuildContext context) {
     // TODO: implement build
 
-    _calc();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Surah Ayat'),
       ),
-      body: _buildCategoryWidgets(),
+      body: _mainProjectWidget(),
     );
   }
 }

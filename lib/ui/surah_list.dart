@@ -20,6 +20,7 @@ class SurahLists extends StatefulWidget {
 class _SurahListState extends State<SurahLists> {
   BuildContext context;
   Future<SurahList> surah;
+  int len;
 
   _SurahListState(this.surah, this.context);
 
@@ -39,22 +40,22 @@ class _SurahListState extends State<SurahLists> {
                     } else if (snapshot.hasError) {
                       return Text("${snapshot.error}");
                     }
+
                     return CircularProgressIndicator();
                   },
                 ),
               ),
               onPressed: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AyahList(
-                              context,
-                              surah: ServiceAPI.fetchListOfAyah(index),
-                            ),
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AyahList(
+                      context,
+                      surah: ServiceAPI.fetchListOfAyah(index),
                     ),
+                  ),
                 );
-              }
-              ),
+              }),
           height: 50,
           color: Colors.blue,
         );
