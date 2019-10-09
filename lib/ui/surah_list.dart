@@ -51,6 +51,7 @@ class _SurahListState extends State<SurahLists> {
                   MaterialPageRoute(
                     builder: (context) => AyahList(
                       context,
+                      index,
                       surah: ServiceAPI.fetchListOfAyah(index),
                     ),
                   ),

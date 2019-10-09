@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:async';
@@ -6,18 +7,48 @@ import 'package:gleam_app/model/surah.dart';
 class AyahList extends StatefulWidget {
   final Future<RootAyah> surah;
   final BuildContext context;
+  final int index;
 
   @override
-  _AyahListState createState() => _AyahListState(this.surah);
+  _AyahListState createState() => _AyahListState(this.surah, this.index);
 
-  AyahList(this.context, {Key key, this.surah}) : super(key: key);
+  AyahList(this.context, this.index, {Key key, this.surah}) : super(key: key);
 }
 
 class _AyahListState extends State<AyahList> {
   Future<RootAyah> surah;
-  _AyahListState(this.surah);
+  int index;
+  _AyahListState(this.surah, this.index);
+
+  int audio;
 
   String playBtnUrl = 'assets/media/001_play_button.svg';
+
+  AudioPlayer audioPlayer = AudioPlayer(mode: PlayerMode.LOW_LATENCY);
+
+  play() async {
+    int result = await audioPlayer.play(getUrl(index));
+    if (result == 1) {
+    } else {
+      audioPlayer.dispose();
+    }
+  }
+
+  changePhoto(String url) {
+    setState(() {
+      playBtnUrl = url;
+    });
+  }
+
+  String getUrl(int indexs) {
+    indexs++;
+    String url =
+        'https://verse.mp3quran.net/data/Yasser_Ad-Dussary_128kbps/00' +
+            indexs.toString() +
+            '003.mp3';
+
+    return url;
+  }
 
   Widget _audioUI() {
     return Container(
@@ -31,23 +62,25 @@ class _AyahListState extends State<AyahList> {
 
         children: <Widget>[
           Expanded(
-
             child: FloatingActionButton(
-
-              onPressed: (){
-                setState(() {
-                  if(playBtnUrl != 'assets/media/002_pause.svg'){
-                    playBtnUrl = 'assets/media/002_pause.svg';
-                  }else{
-                    playBtnUrl = 'assets/media/001_play_button.svg';
+              onPressed: () {
+                setState(() async {
+                  if (playBtnUrl != 'assets/media/002_pause.svg') {
+                    changePhoto('assets/media/002_pause.svg');
+                    if (audio == 1) {
+                      audio = await audioPlayer.resume();
+                    } else if (audio != 1 && audio == null) {
+                      audioPlayer.play(getUrl(index));
+                    }
+                  } else {
+                    changePhoto('assets/media/001_play_button.svg');
+                    audio = await audioPlayer.pause();
                   }
                 });
               },
               child: SvgPicture.asset(playBtnUrl),
             ),
           ),
-
-
         ],
       ),
     );
@@ -96,9 +129,8 @@ class _AyahListState extends State<AyahList> {
         children: <Widget>[
           _audioUI(),
           Expanded(
-              child:_mainProjectWidget(),
+            child: _mainProjectWidget(),
           ),
-
         ],
       ),
     );
