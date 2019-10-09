@@ -8,9 +8,9 @@ This project is a starting point for a Flutter application.
 
 Snapshots:
 
-![image](/relative/gleam_app/snapshots/Screenshot_20191009_165800.png)
+![image](https://github.com/ibrahimq21/gleam_app/blob/master/snapshots/Screenshot_20191009_165800.png)
 
-![image](/relative/gleam_app/snapshots/Screenshot_20191009_171137.png)
+![image](https://github.com/ibrahimq21/gleam_app/blob/master/snapshots/Screenshot_20191009_171137.png)
 
 
 
