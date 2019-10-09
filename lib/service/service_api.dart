@@ -8,20 +8,31 @@ class Ret {
 }
 
 class ServiceAPI {
-  static Future<RootAyah> fetchListOfAyah(int surah) async {
-    surah++;
+  static var response;
+
+  static Future<RootAyah> fetchLink(int surahNumber) async {
+    surahNumber++;
+    response = await http.get('http://api.alquran.cloud/v1/surah/' +
+        surahNumber.toString() +
+        '/en.asad');
+
+    RootAyah ayats = RootAyah.fromJson(response);
+    return ayats;
+  }
+
+  static Future<RootAyah> fetchListOfAyah(int surahNumber) async {
+    surahNumber++;
     try {
-      final res = await http.get(
-          'http://api.alquran.cloud/v1/surah/' + surah.toString() + '/en.asad');
+      final res = await http.get('http://api.alquran.cloud/v1/surah/' +
+          surahNumber.toString() +
+          '/en.asad');
 
       if (res.statusCode == 200) {
         final jsonRes = json.decode(res.body);
 
         RootAyah ayats = RootAyah.fromJson(jsonRes);
 
-        int len = ayats.surah.numberOfAyah;
 
-        Ret.len = len;
 
         return ayats;
       } else {

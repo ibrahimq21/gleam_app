@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:async';
 import 'package:gleam_app/model/surah.dart';
 
@@ -16,88 +17,70 @@ class _AyahListState extends State<AyahList> {
   Future<RootAyah> surah;
   _AyahListState(this.surah);
 
+  String playBtnUrl = 'assets/media/001_play_button.svg';
+
+  Widget _audioUI() {
+    return Container(
+      height: 80,
+      width: double.infinity,
+      color: Colors.blueGrey,
+      padding: EdgeInsets.all(16.6),
+      child: Row(
+//        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+        children: <Widget>[
+          Expanded(
+
+            child: FloatingActionButton(
+
+              onPressed: (){
+                setState(() {
+                  if(playBtnUrl != 'assets/media/002_pause.svg'){
+                    playBtnUrl = 'assets/media/002_pause.svg';
+                  }else{
+                    playBtnUrl = 'assets/media/001_play_button.svg';
+                  }
+                });
+              },
+              child: SvgPicture.asset(playBtnUrl),
+            ),
+          ),
 
 
-  Widget _mainProjectWidget(){
+        ],
+      ),
+    );
+  }
 
+  Widget _mainProjectWidget() {
     return FutureBuilder<RootAyah>(
       future: surah,
-      builder: (context, snapshot){
-        if(snapshot.connectionState == ConnectionState.none && snapshot.hasData == null){
-
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.none &&
+            snapshot.hasData == null) {
           return CircularProgressIndicator();
         }
 
         return ListView.separated(
-
-
-            itemCount: snapshot.data.surah.ayahs.length,
-            itemBuilder: (context, int index){
-              return Container(
-                height: 50,
-                color: Colors.blue,
-                child: RaisedButton(
+          itemCount: snapshot.data.surah.ayahs.length,
+          itemBuilder: (context, int index) {
+            return Container(
+              height: 50,
+              color: Colors.blue,
+              child: RaisedButton(
                   child: Center(
                     child: Text('${snapshot.data.surah.ayahs[index].text}'),
-
                   ),
-                    onPressed: (){
-                      Navigator.pop(context);
-                    }
-                ),
-              );
-            },
-          separatorBuilder: (BuildContext context, int index) => const Divider(),
-        );
-
-      },
-
-    );
-
-  }
-
-
-  int length = 1;
-
-
-  RootAyah ayahList = new RootAyah();
-
-  
-
-  Widget _buildCategoryWidgets() {
-    return ListView.separated(
-
-      padding: const EdgeInsets.all(8),
-
-
-      itemCount: 100,
-      itemBuilder: (BuildContext context, int index) {
-        return Container(
-          child: RaisedButton(
-              child: Center(
-                child: FutureBuilder<RootAyah>(
-                  future: surah,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return ListTile(
-                        title: Text('${snapshot.data.surah.ayahs[index].text}'),
-                      );
-
-                    } else if (snapshot.hasError) {
-                      return Text("${snapshot.error}");
-                    }
-                    return CircularProgressIndicator();
-                  },
-                ),
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              }),
-          height: 50,
-          color: Colors.blue,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  }),
+            );
+          },
+          separatorBuilder: (BuildContext context, int index) =>
+              const Divider(),
         );
       },
-      separatorBuilder: (BuildContext context, int index) => const Divider(),
     );
   }
 
@@ -109,7 +92,15 @@ class _AyahListState extends State<AyahList> {
       appBar: AppBar(
         title: const Text('Surah Ayat'),
       ),
-      body: _mainProjectWidget(),
+      body: Column(
+        children: <Widget>[
+          _audioUI(),
+          Expanded(
+              child:_mainProjectWidget(),
+          ),
+
+        ],
+      ),
     );
   }
 }
